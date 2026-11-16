@@ -1,0 +1,7 @@
+sku_id,seller_id,listed_title,listed_category,listed_color,listed_price,primary_image,gallery_images
+SKU-1001,SELLER-101,AeroSprint Pro Athletic Running Shoe,Footwear,Red,129.99,SKU-1001_red_running_shoe.jpg,SKU-1001_red_running_shoe.jpg
+SKU-1002,SELLER-102,Stealth Matte Black Commuter Backpack,Bags,Black,89.0,SKU-1002_blue_commuter_backpack.jpg,SKU-1002_blue_commuter_backpack.jpg
+SKU-1003,SELLER-103,Minimalist White Ceramic Coffee Mug,Kitchen,White,18.5,SKU-1003_watermarked_coffee_mug.jpg,SKU-1003_watermarked_coffee_mug.jpg
+SKU-1004,SELLER-104,ChronoClassic Stainless Steel Watch,Watches,Silver,249.0,SKU-1004_tiny_low_res_watch.png,SKU-1004_tiny_low_res_watch.png
+SKU-1005,SELLER-105,Studio ANC Wireless Over-Ear Headphones,Electronics,Black,299.0,SKU-1005_wrong_item_cat_photo.jpg,SKU-1005_wrong_item_cat_photo.jpg
+SKU-1006,SELLER-106,UltraBook Pro 14-inch Silver Laptop,Electronics,Silver,1199.0,SKU-1006_silver_laptop_front.jpg,SKU-1006_silver_laptop_front.jpg|SKU-1006_silver_laptop_side.jpg
