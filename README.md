@@ -151,24 +151,39 @@ make teardown         # Deletes the demo BQ dataset, connection, and uploaded GC
 
 ---
 
-## Sample Query Outputs
+## GCP Console Walkthrough & Sample Query Outputs
 
-### Step 1 (`make step1`): Ad-Hoc GCS Discovery via `OBJ.LIST()`
-Scans `gs://<your-bucket>/product_listings/images/*` directly without creating an External Object Table, returning a pre-populated `ObjectRef` (`object_ref_struct`) per file:
+### Step 0 (`make upload`): Uploaded Sample Images in Cloud Storage
+All 7 product listing photos uploaded to `gs://<your-bucket>/product_listings/images/` (note `SKU-1004_tiny_low_res_watch.png` at `378 B` vs. ~400–900 KB for the studio JPEGs):
 
-![Step 1 OBJ.LIST Output](docs/step1_results.png)
+![Step 0: Cloud Storage Bucket Listing](docs/step0_bucketlist.png)
+
+### Step 1 (`make step1`): Cloud Resource Connection & Ad-Hoc `OBJ.LIST()` Discovery
+The BigQuery Cloud Resource Connection (`bq_objectref_demo_gcs_conn` - created as part of `make setup`) provides delegated access via its auto-generated service account, allowing `OBJ.LIST()` to scan `gs://<your-bucket>/product_listings/images/*` directly without creating an External Object Table:
+
+![Step 1: BigQuery Cloud Resource Connection](docs/step1_bqconnection.png)
+
+![Step 1: OBJ.LIST Output](docs/step1_results.png)
 
 ### Step 2 (`make step2`): Native Multimodal Table (`ObjectRef` & `ARRAY<ObjectRef>`)
-Combines structured CSV columns with `primary_image_ref` and a multi-photo `gallery_image_refs` (`ARRAY<ObjectRef>`) column on `SKU-1006`:
+Combines structured CSV columns with `primary_image_ref` (`RECORD`) and a multi-photo `gallery_image_refs` (`REPEATED RECORD`) column—both storing nested `uri`, `version`, `authorizer`, and `details (JSON)` fields inside a standard BigQuery table:
 
-![Step 2 Multimodal Table Output](docs/step2_results.png)
+![Step 2: BigQuery Multimodal Table Schema](docs/step2_bqschema.png)
+
+![Step 2: Multimodal Table Output](docs/step2_results.png)
 
 ### Step 3 (`make step3`): Pixel Resolution Gate via `OBJ.GET_ACCESS_URL()` + Python UDF (`Pillow`)
-Streams each image via a short-lived signed URL inside a Managed Python UDF to inspect pixel dimensions at `$0` Vertex AI token cost:
+Deploys the persistent Managed Python UDF (`python-3.11` + `pillow`) and streams each image via a short-lived signed URL to inspect pixel dimensions at `$0` Vertex AI token cost:
 
-![Step 3 Python UDF Output](docs/step3_results.png)
+![Step 3: BigQuery Managed Python UDF Routine](docs/step3_pythonroutine.png)
+
+![Step 3: Python UDF Output](docs/step3_results.png)
 
 ### Step 4 (`make step4`): Final Multimodal Audit (`AI.IF` + `AI.CLASSIFY` + `AI.GENERATE` + Pipe `|>`)
-Evaluates every listing using `gemini-3.5-flash-lite` and produces the final audit decision:
+Evaluates every listing using `gemini-3.5-flash-lite` (including generated `visual_description` text and final `audit_decision` classifications):
 
-![Step 4 Final Audit Output](docs/step4_results.png)
+![Step 4: BigQuery Audited Table Preview](docs/step4_bqtable.png)
+
+Highlighted result:
+
+![Step 4: Final Audit Output](docs/step4_results.png)
